@@ -1,23 +1,17 @@
-factorial(1,1).
-factorial(X,Y):-
-	X>1,
-	A is X-1,
-	factorial(A,B),
-	Y is B*X.
+fib(1,1).
+fib(2,1).
+fib(N,F) :-
+    N > 2,
+    N1 is N - 1,
+    N2 is N - 2,
+    fib(N1,F1),
+    fib(N2,F2),
+    F is F1 + F2.
 
-contains([H|_],H).
-contains([_|T],Y):-
-	contains(T,Y).
+myfib(_,Y,1,Y).
+myfib(X,Y,N,Z) :-
+    N > 1,
+    T is X + Y,
+    N1 is N - 1,
+    myfib(Y,T,N1,Z).
 
-containsall(_,[]).
-containsall([H|T],[H|T]):-
-	contains(X,H),
-	\+ contains(T,H),
-	containsall(X,T)
-
-perm(X,Y):-
-	length(X,Z),
-	length(Y,Z),
-	containsall(X,Y),
-        containsall(Y,X).
-%bitches be tripping
