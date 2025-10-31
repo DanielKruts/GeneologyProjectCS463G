@@ -20,3 +20,4 @@ perm(X,Y):-
 	length(Y,Z),
 	containsall(X,Y),
         containsall(Y,X).
+%bitches be tripping
