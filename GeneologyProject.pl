@@ -1,9 +1,9 @@
 factorial(1,1).
 factorial(X,Y):-
 	X>1,
-	A is X-1
+	A is X-1,
 	factorial(A,B),
-	Y is B*X
+	Y is B*X.
 
 contains([H|_],H).
 contains([_|T],Y):-
