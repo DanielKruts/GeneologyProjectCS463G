@@ -34,7 +34,7 @@ parent(adam, sheoldred).
 parent(adam, titus).
 
 %geoffry and turbine's children
-Parent(geoffry, dude).
+parent(geoffry, dude).
 parent(geoffry, dudette).
 parent(geoffry, guy).
 parent(turbine, dude).
@@ -46,14 +46,6 @@ parent(titus, chairon).
 parent(titus, gadriel).
 parent(nurgle, chairon).
 parent(nurgle, gadriel).
-
-% Given potential grandparent(X) and potential grandchild(Y)
-% Checks to see if there is a child of X, which is Z
-% and that the child Z has potential grandchild Y as a child
-grandparent(X, Y):-
-    parent(X, Z),
-    parent(Z, Y).
-
 
 %test stuff
 fib(1,1).
