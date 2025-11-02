@@ -34,7 +34,7 @@ parent(adam, sheoldred).
 parent(adam, titus).
 
 %geoffry and turbine's children
-parent(geoffry, dude).
+Parent(geoffry, dude).
 parent(geoffry, dudette).
 parent(geoffry, guy).
 parent(turbine, dude).
@@ -65,11 +65,17 @@ myfib(X,Y,N,Z) :-
     N1 is N - 1,
     myfib(Y,T,N1,Z).
 
-basefamilytree(rag, gervin_the_bold).
-basefamilytree(gervin_the_weird, gervin_the_bold).
-basefamilytree(gervin_the_bold, nivreg).
-basefamilytree(rag, nivreg).
 children_of(Parent, Kid) :-
-    basefamilytree(Kid, Parent).
+    parent(Parent, Kid).
+
+grandchildren_of(Grandparent, Grandchild) :-
+    parent(Grandparent, Parent),
+    parent(Parent, Grandchild).
+
+cousin_of(Cousin1,Cousin2) :-
+    parent(Grandparent,Parent1),
+    parent(Grandparent,Parent2),
+    parent(Parent1,Cousin1),
+    parent(Parent2,Cousin2).
 
 
