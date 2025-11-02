@@ -1,3 +1,8 @@
+%Facts (AKA, the large number of relations between our family tree
+parent(Gervin_the_Bold, Gervin_the_Weird).
+
+
+
 fib(1,1).
 fib(2,1).
 fib(N,F) :-
