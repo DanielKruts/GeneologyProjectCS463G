@@ -107,5 +107,8 @@ cousin_of(Cousin1,Cousin2) :-
     Parent1 \= Parent2,
     Cousin1 \= Cousin2.
 
-cousin_list(Cousin1,Cousin2) :-
-    findall(cousin_of(Cousin1, Cousin2)).
+
+cousins_list(Person, Unique) :-
+    findall(Cousin, cousin_of(Person, Cousin), Cousins),
+    sort(Cousins, Unique).
+
