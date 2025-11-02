@@ -1,51 +1,51 @@
 %Facts (AKA, the large number of relations between our family tree)
 %gervin the bold and nivreg's children
-parent(gervin_the_bold, gervin_the_weird).
-parent(gervin_the_bold, eden).
-parent(nivreg, gervin_the_weird).
-parent(nivreg, eden).
+child(gervin_the_bold, gervin_the_weird).
+child(gervin_the_bold, eden).
+child(nivreg, gervin_the_weird).
+child(nivreg, eden).
 
 %gervin the weird and rag's children
-parent(gervin_the_weird, gervin_the_inferno).
-parent(gervin_the_weird, quasimoto).
-parent(rag, gervin_the_inferno).
-parent(rag, quasimoto).
+child(gervin_the_weird, gervin_the_inferno).
+child(gervin_the_weird, quasimoto).
+child(rag, gervin_the_inferno).
+child(rag, quasimoto).
 
 %quasimoto and frog's child
-parent(quasimoto, thea).
-parent(frog, thea).
+child(quasimoto, thea).
+child(frog, thea).
 
 %gervin the inferno and priscilla's children
-parent(gervin_the_inferno, gervin_the_reborn).
-parent(gervin_the_inferno, vulkan).
-parent(gervin_the_inferno, dorn).
-parent(gervin_the_inferno, lion).
-parent(priscilla, gervin_the_reborn).
-parent(priscilla, vulkan).
-parent(priscilla, dorn).
-parent(priscilla, lion).
+child(gervin_the_inferno, gervin_the_reborn).
+child(gervin_the_inferno, vulkan).
+child(gervin_the_inferno, dorn).
+child(gervin_the_inferno, lion).
+child(priscilla, gervin_the_reborn).
+child(priscilla, vulkan).
+child(priscilla, dorn).
+child(priscilla, lion).
 
 %eden and adam's children
-parent(eden, geoffry).
-parent(eden, sheoldred).
-parent(eden, titus).
-parent(adam, geoffry).
-parent(adam, sheoldred).
-parent(adam, titus).
+child(eden, geoffry).
+child(eden, sheoldred).
+child(eden, titus).
+child(adam, geoffry).
+child(adam, sheoldred).
+child(adam, titus).
 
 %geoffry and turbine's children
-Parent(geoffry, dude).
-parent(geoffry, dudette).
-parent(geoffry, guy).
-parent(turbine, dude).
-parent(turbine, dudette).
-parent(turbine, guy).
+child(geoffry, dude).
+child(geoffry, dudette).
+child(geoffry, guy).
+child(turbine, dude).
+child(turbine, dudette).
+child(turbine, guy).
 
 %titus and nurgle's children
-parent(titus, chairon).
-parent(titus, gadriel).
-parent(nurgle, chairon).
-parent(nurgle, gadriel).
+child(titus, chairon).
+child(titus, gadriel).
+child(nurgle, chairon).
+child(nurgle, gadriel).
 
 %test stuff
 fib(1,1).
@@ -69,13 +69,16 @@ children_of(Parent, Kid) :-
     parent(Parent, Kid).
 
 grandchildren_of(Grandparent, Grandchild) :-
-    parent(Grandparent, Parent),
-    parent(Parent, Grandchild).
+    child(Grandparent, Parent),
+    child(Parent, Grandchild).
 
 cousin_of(Cousin1,Cousin2) :-
-    parent(Grandparent,Parent1),
-    parent(Grandparent,Parent2),
-    parent(Parent1,Cousin1),
-    parent(Parent2,Cousin2).
+    child(Grandparent,Parent1),
+    child(Grandparent,Parent2),
+    child(Parent1,Cousin1),
+    child(Parent2,Cousin2),
+    Parent1 \= Parent2,
+    Cousin1 \= Cousin2.
 
-
+cousin_list(Cousin1,Cousin2) :-
+    findall(cousin_of(Cousin1, Cousin2)).
