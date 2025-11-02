@@ -34,12 +34,21 @@ child(adam, sheoldred).
 child(adam, titus).
 
 %geoffry and turbine's children
+<<<<<<< HEAD
 child(geoffry, dude).
 child(geoffry, dudette).
 child(geoffry, guy).
 child(turbine, dude).
 child(turbine, dudette).
 child(turbine, guy).
+=======
+parent(geoffry, dude).
+parent(geoffry, dudette).
+parent(geoffry, guy).
+parent(turbine, dude).
+parent(turbine, dudette).
+parent(turbine, guy).
+>>>>>>> 4c73673393fc7f4fc818f4667901a9a4abee9ad0
 
 %titus and nurgle's children
 child(titus, chairon).
