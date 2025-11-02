@@ -16,8 +16,9 @@ myfib(X,Y,N,Z) :-
     myfib(Y,T,N1,Z).
 
 basefamilytree(rag, gervin_the_bold).
-basefamilytree(freya, gervin_the_bold).
-basefamilytree(gervin_the_bold, ulric_the_old).
+basefamilytree(gervin_the_weird, gervin_the_bold).
+basefamilytree(gervin_the_bold, nivreg).
+basefamilytree(rag, nivreg).
 children_of(Parent, Kid) :-
     basefamilytree(Kid, Parent).
 
