@@ -30,7 +30,7 @@ parent(Eden, Geoffry).
 parent(Eden, Sheoldred).
 parent(Eden, Titus).
 
-
+%test stuff
 fib(1,1).
 fib(2,1).
 fib(N,F) :-
@@ -47,4 +47,12 @@ myfib(X,Y,N,Z) :-
     T is X + Y,
     N1 is N - 1,
     myfib(Y,T,N1,Z).
+
+basefamilytree(rag, gervin_the_bold).
+basefamilytree(gervin_the_weird, gervin_the_bold).
+basefamilytree(gervin_the_bold, nivreg).
+basefamilytree(rag, nivreg).
+children_of(Parent, Kid) :-
+    basefamilytree(Kid, Parent).
+
 
