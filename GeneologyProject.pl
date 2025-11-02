@@ -34,27 +34,45 @@ child(adam, sheoldred).
 child(adam, titus).
 
 %geoffry and turbine's children
-<<<<<<< HEAD
 child(geoffry, dude).
 child(geoffry, dudette).
 child(geoffry, guy).
 child(turbine, dude).
 child(turbine, dudette).
 child(turbine, guy).
-=======
-parent(geoffry, dude).
-parent(geoffry, dudette).
-parent(geoffry, guy).
-parent(turbine, dude).
-parent(turbine, dudette).
-parent(turbine, guy).
->>>>>>> 4c73673393fc7f4fc818f4667901a9a4abee9ad0
 
 %titus and nurgle's children
 child(titus, chairon).
 child(titus, gadriel).
 child(nurgle, chairon).
 child(nurgle, gadriel).
+
+%Ages of the old farts
+age(gervin_the_bold, 90).
+age(nivreg, 88).
+age(gervin_the_weird, 67).
+age(eden, 70).
+age(rag, 68).
+age(quasimoto, 48).
+age(gervin_the_inferno, 49).
+age(frog, 20).
+age(thea, 3).
+age(priscilla, 22).
+age(gervin_the_reborn, 11).
+age(vulkan, 4).
+age(dorn, 6).
+age(lion, 12).
+age(adam, 69).
+age(geoffry, 50).
+age(sheoldred, 46).
+age(titus, 53).
+age(turbine, 36).
+age(dude, 13).
+age(dudette, 14).
+age(guy, 15).
+age(nurgle, 52).
+age(chairon, 32).
+age(gadriel, 33).
 
 %test stuff
 fib(1,1).
