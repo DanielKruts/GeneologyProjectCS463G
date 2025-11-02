@@ -1,34 +1,51 @@
-%Facts (AKA, the large number of relations between our family tree
-%Gervin the Bold and Nivreg's children
-parent(Gervin_the_Bold, Gervin_the_Weird).
-parent(Gervin_the_Bold, Eden).
-parent(Nivreg, Gervin_the_Weird).
-parent(Nivreg, Eden).
+%Facts (AKA, the large number of relations between our family tree)
+%gervin the bold and nivreg's children
+parent(gervin_the_bold, gervin_the_weird).
+parent(gervin_the_bold, eden).
+parent(nivreg, gervin_the_weird).
+parent(nivreg, eden).
 
-%Gervin the Weird and Rag's Children
-parent(Gervin_the_Weird, Gervin_the_Inferno).
-parent(Gervin_the_Weird, Quasimoto).
-parent(Rag, Gervin_the_Inferno).
-parent(Rag, Quasimoto).
+%gervin the weird and rag's children
+parent(gervin_the_weird, gervin_the_inferno).
+parent(gervin_the_weird, quasimoto).
+parent(rag, gervin_the_inferno).
+parent(rag, quasimoto).
 
-%Quasimoto and Frog's child
-parent(Quasimoto, Thea).
-parent(Frog, Thea).
+%quasimoto and frog's child
+parent(quasimoto, thea).
+parent(frog, thea).
 
-%Gervin the Inferno and Priscilla's children
-parent(Gervin_the_Inferno, Gervin_the_Reborn).
-parent(Gervin_the_Inferno, Vulkan).
-parent(Gervin_the_Inferno, Dorn).
-parent(Gervin_the_Inferno, Lion).
-parent(Priscilla, Gervin_the_Reborn).
-parent(Priscilla, Vulkan).
-parent(Priscilla, Dorn).
-parent(Priscilla, Lion).
+%gervin the inferno and priscilla's children
+parent(gervin_the_inferno, gervin_the_reborn).
+parent(gervin_the_inferno, vulkan).
+parent(gervin_the_inferno, dorn).
+parent(gervin_the_inferno, lion).
+parent(priscilla, gervin_the_reborn).
+parent(priscilla, vulkan).
+parent(priscilla, dorn).
+parent(priscilla, lion).
 
-%Eden and Adam's children
-parent(Eden, Geoffry).
-parent(Eden, Sheoldred).
-parent(Eden, Titus).
+%eden and adam's children
+parent(eden, geoffry).
+parent(eden, sheoldred).
+parent(eden, titus).
+parent(adam, geoffry).
+parent(adam, sheoldred).
+parent(adam, titus).
+
+%geoffry and turbine's children
+parent(geoffry, dude).
+parent(geoffry, dudette).
+parent(geoffry, guy).
+parent(turbine, dude).
+parent(turbine, dudette).
+parent(turbine, guy).
+
+%titus and nurgle's children
+parent(titus, chairon).
+parent(titus, gadriel).
+parent(nurgle, chairon).
+parent(nurgle, gadriel).
 
 %test stuff
 fib(1,1).
