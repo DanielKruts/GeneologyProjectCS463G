@@ -15,3 +15,10 @@ myfib(X,Y,N,Z) :-
     N1 is N - 1,
     myfib(Y,T,N1,Z).
 
+basefamilytree(rag, gervin_the_bold).
+basefamilytree(freya, gervin_the_bold).
+basefamilytree(gervin_the_bold, ulric_the_old).
+children_of(Parent, Kid) :-
+    basefamilytree(Kid, Parent).
+
+
