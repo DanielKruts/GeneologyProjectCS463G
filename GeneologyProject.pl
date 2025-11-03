@@ -95,20 +95,39 @@ myfib(X,Y,N,Z) :-
 children_of(Parent, Kid) :-
     parent(Parent, Kid).
 
-grandchildren_of(Grandparent, Grandchild) :-
+%Finds the grandparents of the grandchild or the opposite way around
+grandparent(Grandparent, Grandchild) :-
     child(Grandparent, Parent),
     child(Parent, Grandchild).
 
+% Will find if the two people are 1st cousins, but not nth cousins, and
+% will find all 1st cousins of a singular person given
 cousin_of(Cousin1,Cousin2) :-
-    child(Grandparent,Parent1),
-    child(Grandparent,Parent2),
-    child(Parent1,Cousin1),
-    child(Parent2,Cousin2),
-    Parent1 \= Parent2,
-    Cousin1 \= Cousin2.
-
+    %child(Grandparent,Parent1),
+    %child(Grandparent,Parent2),
+    %child(Parent1,Cousin1),
+    %child(Parent2,Cousin2),
+    child(Parent1, Cousin1),
+    child(Parent2, Cousin2),
+    child(Grandparent1, Parent1),
+    child(Grandparent2, Parent2),
+    Grandparent1 = Grandparent2,
+    Parent1 \= Parent2.
 
 cousins_list(Person, Unique) :-
     findall(Cousin, cousin_of(Person, Cousin), Cousins),
     sort(Cousins, Unique).
 
+%Returns whether two cousins are nth cousins or not
+nthcousin(C1,C2,N):-
+    child(C1,C2).
+
+% This will compute given two cousins, the label of which nth cousin
+% they are however many removed
+nthcousinkremoved(N,K,X,Y):-
+    child(X,Y).
+
+% This will compute given some child and parent? Each parent's children
+% are found?
+nthchild(C,P,N):-
+    child(X,Y).
