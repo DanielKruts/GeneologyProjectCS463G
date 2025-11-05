@@ -119,16 +119,43 @@ cousins_list(Person, Unique) :-
     findall(Cousin, cousin_of(Person, Cousin), Cousins),
     sort(Cousins, Unique).
 
+% base case
+ancestor(Ancestor, Descendant, 1):-
+    parent(Ancestor, Descendant).
+% find the ancestor or descendant of any given person
+ancestor(A, D, N):-
+    parent(A, X),
+    ancestor(X, D, M),
+    N is M + 1.
+
+%Finds all common ancestors given two people C1 and C2 and which generation for each
+commonAncestor(A,C1,C2,G1,G2):-
+    ancestor(A,C1,G1),
+    ancestor(A,C2,G2),
+    A \= C1,
+    A \= C2.
+
 %Returns whether two cousins are nth cousins or not
 nthcousin(C1,C2,1):-
     cousin_of(C1,C2).
 nthcousin(C1,C2,N):-
-    N>1,
+    child(C1,C2),
+    N is N + 1.
 
+nthcousinkremoved(N,K,X,Y):-
+    N = K,
+    cousin_of(X,Y).
 % This will compute given two cousins, the label of which nth cousin
 % they are however many removed
 nthcousinkremoved(N,K,X,Y):-
-    child(X,Y).
+    commonAncestor(A,X,Y,G1,G2),
+    number(G1), number(G2),
+    (   G1 >= G2
+    ->  K is G1 - G2,
+        N is G2
+    ;   K is G2 - G1,
+        N is G1
+    ).
 
 % This will compute given some child and parent? Each parent's children
 % are found?
