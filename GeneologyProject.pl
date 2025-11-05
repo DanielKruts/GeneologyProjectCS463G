@@ -1,51 +1,51 @@
 %Facts (AKA, the large number of relations between our family tree)
 %gervin the bold and nivreg's children
-child(gervin_the_bold, gervin_the_weird).
-child(gervin_the_bold, eden).
-child(nivreg, gervin_the_weird).
-child(nivreg, eden).
+child(gervin_the_weird,gervin_the_bold).
+child(eden,gervin_the_bold).
+child(gervin_the_weird, nivreg).
+child(eden, nivreg).
 
 %gervin the weird and rag's children
-child(gervin_the_weird, gervin_the_inferno).
-child(gervin_the_weird, quasimoto).
-child(rag, gervin_the_inferno).
-child(rag, quasimoto).
+child(gervin_the_inferno, gervin_the_weird).
+child(quasimoto, gervin_the_weird).
+child(gervin_the_inferno, rag).
+child(quasimoto, rag).
 
 %quasimoto and frog's child
-child(quasimoto, thea).
-child(frog, thea).
+child(thea,quasimoto).
+child(thea,frog).
 
 %gervin the inferno and priscilla's children
-child(gervin_the_inferno, gervin_the_reborn).
-child(gervin_the_inferno, vulkan).
-child(gervin_the_inferno, dorn).
-child(gervin_the_inferno, lion).
-child(priscilla, gervin_the_reborn).
-child(priscilla, vulkan).
-child(priscilla, dorn).
-child(priscilla, lion).
+child(gervin_the_reborn, gervin_the_inferno).
+child(vulkan, gervin_the_inferno).
+child(dorn, gervin_the_inferno).
+child(lion, gervin_the_inferno).
+child(gervin_the_reborn, priscilla).
+child(vulkan, priscilla).
+child(dorn, priscilla).
+child(lion, priscilla).
 
-%eden and adam's children
-child(eden, geoffry).
-child(eden, sheoldred).
-child(eden, titus).
-child(adam, geoffry).
-child(adam, sheoldred).
-child(adam, titus).
+% eden and adam's children
+child(geoffry, eden).
+child(sheoldred, eden).
+child(titus, eden).
+child(geoffry, adam).
+child(sheoldred, adam).
+child(titus, adam).
 
-%geoffry and turbine's children
-child(geoffry, dude).
-child(geoffry, dudette).
-child(geoffry, guy).
-child(turbine, dude).
-child(turbine, dudette).
-child(turbine, guy).
+% geoffry and turbine's children
+child(dude, geoffry).
+child(dudette, geoffry).
+child(guy, geoffry).
+child(dude, turbine).
+child(dudette, turbine).
+child(guy, turbine).
 
-%titus and nurgle's children
-child(titus, chairon).
-child(titus, gadriel).
-child(nurgle, chairon).
-child(nurgle, gadriel).
+% titus and nurgle's children
+child(chairon, titus).
+child(gadriel, titus).
+child(chairon, nurgle).
+child(gadriel, nurgle).
 
 %Ages of the old farts
 age(gervin_the_bold, 90).
@@ -92,13 +92,14 @@ myfib(X,Y,N,Z) :-
     N1 is N - 1,
     myfib(Y,T,N1,Z).
 
-children_of(Parent, Kid) :-
-    parent(Parent, Kid).
-
 %Finds the grandparents of the grandchild or the opposite way around
 grandparent(Grandparent, Grandchild) :-
-    child(Grandparent, Parent),
-    child(Parent, Grandchild).
+    child(Parent, Grandparent),
+    child(Grandchild, Parent).
+
+%Parent predicate given child facts
+parent(Parent, Child):-
+    child(Child, Parent).
 
 % Will find if the two people are 1st cousins, but not nth cousins, and
 % will find all 1st cousins of a singular person given
@@ -107,10 +108,10 @@ cousin_of(Cousin1,Cousin2) :-
     %child(Grandparent,Parent2),
     %child(Parent1,Cousin1),
     %child(Parent2,Cousin2),
-    child(Parent1, Cousin1),
-    child(Parent2, Cousin2),
-    child(Grandparent1, Parent1),
-    child(Grandparent2, Parent2),
+    child(Cousin1, Parent1),
+    child(Cousin2, Parent2),
+    child(Parent1, Grandparent1),
+    child(Parent2, Grandparent2),
     Grandparent1 = Grandparent2,
     Parent1 \= Parent2.
 
@@ -119,8 +120,10 @@ cousins_list(Person, Unique) :-
     sort(Cousins, Unique).
 
 %Returns whether two cousins are nth cousins or not
+nthcousin(C1,C2,1):-
+    cousin_of(C1,C2).
 nthcousin(C1,C2,N):-
-    child(C1,C2).
+    N>1,
 
 % This will compute given two cousins, the label of which nth cousin
 % they are however many removed
