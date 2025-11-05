@@ -98,22 +98,17 @@ grandparent(Grandparent, Grandchild) :-
     child(Grandchild, Parent).
 
 %Parent predicate given child facts
-parent(Parent, Child):-
-    child(Child, Parent).
+
 
 % Will find if the two people are 1st cousins, but not nth cousins, and
 % will find all 1st cousins of a singular person given
 cousin_of(Cousin1,Cousin2) :-
-    %child(Grandparent,Parent1),
-    %child(Grandparent,Parent2),
-    %child(Parent1,Cousin1),
-    %child(Parent2,Cousin2),
     child(Cousin1, Parent1),
     child(Cousin2, Parent2),
-    child(Parent1, Grandparent1),
-    child(Parent2, Grandparent2),
-    Grandparent1 = Grandparent2,
-    Parent1 \= Parent2.
+    child(Parent1, Grandparent),
+    child(Parent2, Grandparent),
+    Parent1 \= Parent2,
+    Cousin1 \= Cousin2.
 
 cousins_list(Person, Unique) :-
     findall(Cousin, cousin_of(Person, Cousin), Cousins),
@@ -157,7 +152,33 @@ nthcousinkremoved(N,K,X,Y):-
         N is G1
     ).
 
-% This will compute given some child and parent? Each parent's children
-% are found?
-nthchild(C,P,N):-
-    child(X,Y).
+
+
+% Base case: N = 1, get the direct parent
+nthparent(Child, Parent, 1) :-
+    child(Child, Parent).
+
+nthparent(Child, Ancestor, N) :-
+    child(Child, Parent),
+    nthparent(Parent, Ancestor, N1),
+    N is N1 + 1.
+
+maxCousin(N) :- N = 2.
+minCousin(N) :- N = 1.
+maxRemoved(K) :- K = 2.
+minRemoved(K) :- K = 0.
+
+
+nthcousin(Cousin1, Cousin2, N, K) :-
+    % find first common ancestor
+    maxCousin(MaxN),
+    minCousin(MinN),
+    N1 is N - 1,
+    N =< MaxN,
+    N >= MinN,
+    nthparent(Cousin1, Ancestor, N),
+    nthparent(Cousin2, Ancestor, N),
+    nthparent(Cousin1, LilAncestor1, N1),
+    nthparent(Cousin2, LilAncestor2, N1),
+    LilAncestor1 \= LilAncestor2,
+    K is 0.
