@@ -98,39 +98,81 @@ grandparent(Grandparent, Grandchild) :-
     child(Grandchild, Parent).
 
 %Parent predicate given child facts
-parent(Parent, Child):-
-    child(Child, Parent).
+
 
 % Will find if the two people are 1st cousins, but not nth cousins, and
 % will find all 1st cousins of a singular person given
 cousin_of(Cousin1,Cousin2) :-
-    %child(Grandparent,Parent1),
-    %child(Grandparent,Parent2),
-    %child(Parent1,Cousin1),
-    %child(Parent2,Cousin2),
     child(Cousin1, Parent1),
     child(Cousin2, Parent2),
-    child(Parent1, Grandparent1),
-    child(Parent2, Grandparent2),
-    Grandparent1 = Grandparent2,
-    Parent1 \= Parent2.
+    child(Parent1, Grandparent),
+    child(Parent2, Grandparent),
+    Parent1 \= Parent2,
+    Cousin1 \= Cousin2.
 
 cousins_list(Person, Unique) :-
     findall(Cousin, cousin_of(Person, Cousin), Cousins),
     sort(Cousins, Unique).
 
-%Returns whether two cousins are nth cousins or not
-nthcousin(C1,C2,1):-
-    cousin_of(C1,C2).
-nthcousin(C1,C2,N):-
-    N>1,
-
-% This will compute given two cousins, the label of which nth cousin
-% they are however many removed
-nthcousinkremoved(N,K,X,Y):-
-    child(X,Y).
 
 % This will compute given some child and parent? Each parent's children
 % are found?
-nthchild(C,P,N):-
-    child(X,Y).
+%nthchild(C,P,N):-
+    %child(X,Y).
+% Base case: direct (first) cousins
+nkCousin(Cousin1, Cousin2, 1, _) :-
+    cousin_of(Cousin1, Cousin2).
+
+
+% Recursive case: Nth cousins (N > 1)
+nkCousin(Child1, Child2, N, K) :-
+    K1 is K + 1,
+    N > 1,
+    N1 is N - 1,
+    child(Child1, Parent1),
+    child(Child2, Parent2),
+    nkCousin(Parent1, Parent2, N1, K1).
+
+nkList(Person, AllCousins, N, K) :-
+    N > 1,
+    N1 is N - 1,
+    % Find all (N-1)th cousins of Person's parents
+    findall(Cousin,
+        (
+            child(Child, Person),     % go up to the parent
+            nkList(Child, ParentCousins, N1, K),
+            member(Cousin, ParentCousins)
+        ),
+        CousinLists
+    ),
+    % Flatten into a single list
+    flatten(CousinLists, AllCousins).
+
+% Base case: N = 1, get the direct parent
+nthparent(Child, Parent, 1) :-
+    child(Child, Parent).
+
+nthparent(Child, Ancestor, N) :-
+    child(Child, Parent),
+    nthparent(Parent, Ancestor, N1),
+    N is N1 + 1.
+
+maxCousin(N) :- N = 2.
+minCousin(N) :- N = 1.
+maxRemoved(K) :- K = 2.
+minRemoved(K) :- K = 0.
+
+
+nthcousin(Cousin1, Cousin2, N, K) :-
+    % find first common ancestor
+    maxCousin(MaxN),
+    minCousin(MinN),
+    N1 is N - 1,
+    N =< MaxN,
+    N >= MinN,
+    nthparent(Cousin1, Ancestor, N),
+    nthparent(Cousin2, Ancestor, N),
+    nthparent(Cousin1, LilAncestor1, N1),
+    nthparent(Cousin2, LilAncestor2, N1),
+    LilAncestor1 \= LilAncestor2,
+    K is 0.
