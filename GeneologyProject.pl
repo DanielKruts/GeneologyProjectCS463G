@@ -47,6 +47,26 @@ child(gadriel, titus).
 child(chairon, nurgle).
 child(gadriel, nurgle).
 
+marrige(gervin_the_bold, nivreg).
+marrige(nivreg, gervin_the_bold).
+
+marrige(gervin_the_weird, rag).
+marrige(rag, gervin_the_weird).
+
+marrige(quasimoto, frog).
+marrige(frog, quasimoto).
+
+marrige(gervin_the_inferno, priscilla).
+marrige(priscilla, gervin_the_inferno).
+
+marrige(eden, adam).
+marrige(adam, eden).
+marrige(geoffry, turbine).
+marrige(turbine, geoffry).
+
+marrige(titus, nurgle).
+marrige(nurgle, titus).
+
 %Ages of the old farts
 age(gervin_the_bold, 90).
 age(nivreg, 88).
@@ -74,112 +94,117 @@ age(nurgle, 52).
 age(chairon, 32).
 age(gadriel, 33).
 
-%test stuff
-fib(1,1).
-fib(2,1).
-fib(N,F) :-
-    N > 2,
-    N1 is N - 1,
-    N2 is N - 2,
-    fib(N1,F1),
-    fib(N2,F2),
-    F is F1 + F2.
+% %test stuff
+% fib(1,1).
+% fib(2,1).
+% fib(N,F) :-
+%     N > 2,
+%     N1 is N - 1,
+%     N2 is N - 2,
+%     fib(N1,F1),
+%     fib(N2,F2),
+%     F is F1 + F2.
 
-myfib(_,Y,1,Y).
-myfib(X,Y,N,Z) :-
-    N > 1,
-    T is X + Y,
-    N1 is N - 1,
-    myfib(Y,T,N1,Z).
+% myfib(_,Y,1,Y).
+% myfib(X,Y,N,Z) :-
+%     N > 1,
+%     T is X + Y,
+%     N1 is N - 1,
+%     myfib(Y,T,N1,Z).
 
-%Finds the grandparents of the grandchild or the opposite way around
-grandparent(Grandparent, Grandchild) :-
-    child(Parent, Grandparent),
-    child(Grandchild, Parent).
+% %Finds the grandparents of the grandchild or the opposite way around
+% grandparent(Grandparent, Grandchild) :-
+%     child(Parent, Grandparent),
+%     child(Grandchild, Parent).
 
-%Parent predicate given child facts
-
-
-% Will find if the two people are 1st cousins, but not nth cousins, and
-% will find all 1st cousins of a singular person given
-cousin_of(Cousin1,Cousin2) :-
-    child(Cousin1, Parent1),
-    child(Cousin2, Parent2),
-    child(Parent1, Grandparent),
-    child(Parent2, Grandparent),
-    Parent1 \= Parent2,
-    Cousin1 \= Cousin2.
-
-cousins_list(Person, Unique) :-
-    findall(Cousin, cousin_of(Person, Cousin), Cousins),
-    sort(Cousins, Unique).
-
-% base case
-ancestor(Ancestor, Descendant, 1):-
-    parent(Ancestor, Descendant).
-% find the ancestor or descendant of any given person
-ancestor(A, D, N):-
-    parent(A, X),
-    ancestor(X, D, M),
-    N is M + 1.
-
-%Finds all common ancestors given two people C1 and C2 and which generation for each
-commonAncestor(A,C1,C2,G1,G2):-
-    ancestor(A,C1,G1),
-    ancestor(A,C2,G2),
-    A \= C1,
-    A \= C2.
-
-%Returns whether two cousins are nth cousins or not
-nthcousin(C1,C2,1):-
-    cousin_of(C1,C2).
-nthcousin(C1,C2,N):-
-    child(C1,C2),
-    N is N + 1.
-
-nthcousinkremoved(N,K,X,Y):-
-    N = K,
-    cousin_of(X,Y).
-% This will compute given two cousins, the label of which nth cousin
-% they are however many removed
-nthcousinkremoved(N,K,X,Y):-
-    commonAncestor(A,X,Y,G1,G2),
-    number(G1), number(G2),
-    (   G1 >= G2
-    ->  K is G1 - G2,
-        N is G2
-    ;   K is G2 - G1,
-        N is G1
-    ).
+% %Parent predicate given child facts
 
 
+% % Will find if the two people are 1st cousins, but not nth cousins, and
+% % will find all 1st cousins of a singular person given
+% cousin_of(Cousin1,Cousin2) :-
+%     child(Cousin1, Parent1),
+%     child(Cousin2, Parent2),
+%     child(Parent1, Grandparent),
+%     child(Parent2, Grandparent),
+%     Parent1 \= Parent2,
+%     Cousin1 \= Cousin2.
 
-% Base case: N = 1, get the direct parent
-nthparent(Child, Parent, 1) :-
+% cousins_list(Person, Unique) :-
+%     findall(Cousin, cousin_of(Person, Cousin), Cousins),
+%     sort(Cousins, Unique).
+
+% % base case
+% ancestor(Ancestor, Descendant, 1):-
+%     parent(Ancestor, Descendant).
+% % find the ancestor or descendant of any given person
+% ancestor(A, D, N):-
+%     parent(A, X),
+%     ancestor(X, D, M),
+%     N is M + 1.
+
+% %Finds all common ancestors given two people C1 and C2 and which generation for each
+% commonAncestor(A,C1,C2,G1,G2):-
+%     ancestor(A,C1,G1),
+%     ancestor(A,C2,G2),
+%     A \= C1,
+%     A \= C2.
+
+% %Returns whether two cousins are nth cousins or not
+% nthcousin(C1,C2,1):-
+%     cousin_of(C1,C2).
+% nthcousin(C1,C2,N):-
+%     child(C1,C2),
+%     N is N + 1.
+
+% nthcousinkremoved(N,K,X,Y):-
+%     N = K,
+%     cousin_of(X,Y).
+% % This will compute given two cousins, the label of which nth cousin
+% % they are however many removed
+% nthcousinkremoved(N,K,X,Y):-
+%     commonAncestor(A,X,Y,G1,G2),
+%     number(G1), number(G2),
+%     (   G1 >= G2
+%     ->  K is G1 - G2,
+%         N is G2
+%     ;   K is G2 - G1,
+%         N is G1
+%     ).
+% Base case: 0th parent, empty path
+
+valid_n(N) :- 
+    between(0, 3, N).
+
+nthparent(ChildParent, ChildParent, 0, []).
+
+nthparent(Child, Parent, 1, [Parent]) :-
     child(Child, Parent).
 
-nthparent(Child, Ancestor, N, [LilAncestor]) :-
+nthparent(Child, Ancestor, N, [Parent|RestPath]) :-
+    valid_n(N),
     N > 1,
     child(Child, Parent),
-    N is N1 + 1,
-    nthparent(Parent, Ancestor, N1. [NewLilAncestor]),
-    NewLilAncestor = [Ancestor | LilAncestor].
+    N1 is N - 1,
+    nthparent(Parent, Ancestor, N1, RestPath).
 
+second_to_last(LilAncestor, [LilAncestor,_]).
+second_to_last(LilAncestor, [_|RestPath]) :-
+    second_to_last(LilAncestor, RestPath).
 
-nthLilAncestor(Child, Ancestor, N, [LilAncestor]) :-
-    M is N - 1,
-    child(Child, Parent),
-    nthparent(Parent, Ancestor, M, [LilAncestor]).
-
+% Helper predicate to print paths for debugging
 nthcousin(Cousin1, Cousin2, N, K) :-
-    % find first common ancestor
-    nthparent(Cousin1, Ancestor, N),
-    nthparent(Cousin2, Ancestor, N),
-    nthLilAncestor(Cousin1, LilAncestor1, N, [LilList1]),
-    sort(LilList1, SortedLilList1),
-    nthLilAncestor(Cousin2, LilAncestor2, N, [LilList2]),
-    sort(LilList2, SortedLilList2),
-    SortedLilList1 \= SortedLilList2,
+    % Option 1, Cousins 
+    nthparent(Cousin1, Ancestor1, N, Path1),
+    nthparent(Cousin2, Ancestor2, N, Path2),
+    second_to_last(LilAncestor1, Path1),
+    second_to_last(LilAncestor2, Path2),
+    marrige(Ancestor1, Partner1),
+    marrige(Ancestor2, Partner2),
+    Ancestor1 \= Partner2,
+    Ancestor2 \= Partner1,  
     Cousin1 \= Cousin2,
     LilAncestor1 \= LilAncestor2,
-    K is 0.
+    Ancestor1 = Ancestor2,
+    write('Cousin1 path: '), write(Path1), nl,
+    write('Cousin2 path: '), write(Path2), nl.
