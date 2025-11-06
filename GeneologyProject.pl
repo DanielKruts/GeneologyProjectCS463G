@@ -74,46 +74,6 @@ age(nurgle, 52).
 age(chairon, 32).
 age(gadriel, 33).
 
-%test stuff
-fib(1,1).
-fib(2,1).
-fib(N,F) :-
-    N > 2,
-    N1 is N - 1,
-    N2 is N - 2,
-    fib(N1,F1),
-    fib(N2,F2),
-    F is F1 + F2.
-
-myfib(_,Y,1,Y).
-myfib(X,Y,N,Z) :-
-    N > 1,
-    T is X + Y,
-    N1 is N - 1,
-    myfib(Y,T,N1,Z).
-
-%Finds the grandparents of the grandchild or the opposite way around
-grandparent(Grandparent, Grandchild) :-
-    child(Parent, Grandparent),
-    child(Grandchild, Parent).
-
-%Parent predicate given child facts
-
-
-% Will find if the two people are 1st cousins, but not nth cousins, and
-% will find all 1st cousins of a singular person given
-cousin_of(Cousin1,Cousin2) :-
-    child(Cousin1, Parent1),
-    child(Cousin2, Parent2),
-    child(Parent1, Grandparent),
-    child(Parent2, Grandparent),
-    Parent1 \= Parent2,
-    Cousin1 \= Cousin2.
-
-cousins_list(Person, Unique) :-
-    findall(Cousin, cousin_of(Person, Cousin), Cousins),
-    sort(Cousins, Unique).
-
 
 % This will compute given some child and parent? Each parent's children
 % are found?
@@ -152,27 +112,28 @@ nkList(Person, AllCousins, N, K) :-
 nthparent(Child, Parent, 1) :-
     child(Child, Parent).
 
-nthparent(Child, Ancestor, N) :-
+nthparent(Child, Ancestor, N, [LilAncestor]) :-
+    N > 1,
     child(Child, Parent),
-    nthparent(Parent, Ancestor, N1),
-    N is N1 + 1.
+    N is N1 + 1,
+    nthparent(Parent, Ancestor, N1. [NewLilAncestor]),
+    NewLilAncestor = [Ancestor | LilAncestor].
 
-maxCousin(N) :- N = 2.
-minCousin(N) :- N = 1.
-maxRemoved(K) :- K = 2.
-minRemoved(K) :- K = 0.
 
+nthLilAncestor(Child, Ancestor, N, [LilAncestor]) :-
+    M is N - 1,
+    child(Child, Parent),
+    nthparent(Parent, Ancestor, M, [LilAncestor]).
 
 nthcousin(Cousin1, Cousin2, N, K) :-
     % find first common ancestor
-    maxCousin(MaxN),
-    minCousin(MinN),
-    N1 is N - 1,
-    N =< MaxN,
-    N >= MinN,
     nthparent(Cousin1, Ancestor, N),
     nthparent(Cousin2, Ancestor, N),
-    nthparent(Cousin1, LilAncestor1, N1),
-    nthparent(Cousin2, LilAncestor2, N1),
+    nthLilAncestor(Cousin1, LilAncestor1, N, [LilList1]),
+    sort(LilList1, SortedLilList1),
+    nthLilAncestor(Cousin2, LilAncestor2, N, [LilList2]),
+    sort(LilList2, SortedLilList2),
+    SortedLilList1 \= SortedLilList2,
+    Cousin1 \= Cousin2,
     LilAncestor1 \= LilAncestor2,
     K is 0.
