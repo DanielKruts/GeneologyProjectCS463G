@@ -172,6 +172,18 @@ age(gadriel, 33).
 %         N is G1
 %     ).
 % Base case: 0th parent, empty path
+kthchild(Person, Person, _).
+kthchild(Child, NthParent, K) :-
+    child(LilParent, NthParent),
+    kthchild(Grandchild, LilParent, K),
+    write('Child is:'), write(LilParent), nl.
+
+% -----------------------------------------------------------------------------
+% kthchild_list(Ancestor, K, ChildList)
+% Collects *all* Kth descendants of Ancestor into a list.
+
+kthchild_list(Ancestor, K, ChildList) :-
+    setof(Child, kthchild(Child, Ancestor, K), ChildList).
 
 valid_n(N) :- 
     between(0, 3, N).
@@ -208,3 +220,4 @@ nthcousin(Cousin1, Cousin2, N, K) :-
     Ancestor1 = Ancestor2,
     write('Cousin1 path: '), write(Path1), nl,
     write('Cousin2 path: '), write(Path2), nl.
+
