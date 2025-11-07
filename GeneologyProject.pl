@@ -171,19 +171,37 @@ age(gadriel, 33).
 %     ;   K is G2 - G1,
 %         N is G1
 %     ).
-% Base case: 0th parent, empty path
-kthchild(Person, Person, _).
-kthchild(Child, NthParent, K) :-
-    child(LilParent, NthParent),
-    kthchild(Grandchild, LilParent, K),
-    write('Child is:'), write(LilParent), nl.
+% This takes a child and a parent, and finds the birth order of the child amon all the parent's children
+% Ex: given gervin_the_reborn and gervin_the_inferno, it returns 2, since there is one child older than gervin_the_reborn
+birth_order(Child, Parent, Order) :-
+    child(Child, Parent),
+    findall(OtherChild, (
+        child(OtherChild, Parent),
+        age(OtherChild, OtherAge),
+        age(Child, ChildAge),
+        OtherAge > ChildAge
+    ), OlderSiblings),
+    length(OlderSiblings, K),
+    Order is K + 1.
+
+% This will calculate all kth children of a parent and what order they are
+kthchild(Parent, Child, K) :-
+    child(Child, Parent),
+    birth_order(Child, Parent, K).
+
+% Given a Parent, finds all children of that parent and puts it into a set ordered from oldest to youngest
+children_by_age(Parent, OrderedChildren) :-
+    findall(Age-Child, (
+        child(Child, Parent),
+        age(Child, Age)), 
+        Children),
+    sort(Children, ReverseSortedChildren),
+    reverse(ReverseSortedChildren, SortedChildren),
+    pairs_values(SortedChildren, OrderedChildren).
 
 % -----------------------------------------------------------------------------
 % kthchild_list(Ancestor, K, ChildList)
 % Collects *all* Kth descendants of Ancestor into a list.
-
-kthchild_list(Ancestor, K, ChildList) :-
-    setof(Child, kthchild(Child, Ancestor, K), ChildList).
 
 valid_n(N) :- 
     between(0, 3, N).
