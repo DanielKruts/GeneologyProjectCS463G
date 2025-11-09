@@ -197,30 +197,32 @@ kthchild(Parent, Child, K) :-
 % kthchild_list(Ancestor, K, ChildList)
 % Collects *all* Kth descendants of Ancestor into a list.
 
+kthchild_list(Ancestor, K, ChildList) :-
+    setof(Child, kthchild(Child, Ancestor, K), ChildList).
+
+
+
+
 valid_n(N) :- 
-    between(0, 3, N).
-
+    between(0, 2, N).
+valid_k(K) :- 
+    between(0, 2, K).
 nthparent(ChildParent, ChildParent, 0, []).
-
 nthparent(Child, Parent, 1, [Parent]) :-
     child(Child, Parent).
-
 nthparent(Child, Ancestor, N, [Parent|RestPath]) :-
-    valid_n(N),
     N > 1,
     child(Child, Parent),
     N1 is N - 1,
     nthparent(Parent, Ancestor, N1, RestPath).
-
 second_to_last(LilAncestor, [LilAncestor,_]).
 second_to_last(LilAncestor, [_|RestPath]) :-
     second_to_last(LilAncestor, RestPath).
-
-% Helper predicate to print paths for debugging
-nthcousin(Cousin1, Cousin2, N, K) :-
-    % Option 1, Cousins 
-    nthparent(Cousin1, Ancestor1, N, Path1),
-    nthparent(Cousin2, Ancestor2, N, Path2),
+nthcousin(Cousin1, Cousin2, N) :-
+    valid_n(N),
+    Generations is N + 1,
+    nthparent(Cousin1, Ancestor1, Generations, Path1),
+    nthparent(Cousin2, Ancestor2, Generations, Path2),
     second_to_last(LilAncestor1, Path1),
     second_to_last(LilAncestor2, Path2),
     marrige(Ancestor1, Partner1),
@@ -229,7 +231,31 @@ nthcousin(Cousin1, Cousin2, N, K) :-
     Ancestor2 \= Partner1,  
     Cousin1 \= Cousin2,
     LilAncestor1 \= LilAncestor2,
-    Ancestor1 = Ancestor2,
-    write('Cousin1 path: '), write(Path1), nl,
-    write('Cousin2 path: '), write(Path2), nl.
+    Ancestor1 = Ancestor2.
+    %write('Cousin1 path: '), write(Path1), nl,
+    %write('Cousin2 path: '), write(Path2), nl.
+% testfunction(CousinPairs, Cousin1, Cousin2, N, K) :-
+%     setof((Cousin1, Cousin2), nthcousin(Cousin1, Cousin2, N, K), CousinPairs).
+nthcousinkthremoved(Person1, Person2, N, K) :-
+    valid_n(N),
+    valid_k(K),
+    % Case 1: Person1’s Kth ancestor is an Nth cousin of Person2
+    (
+        ( K > 0 ->
+            nthparent(Person1, KthAncestor1, K, _)
+        ;   KthAncestor1 = Person1
+        ),
+        nthcousin(KthAncestor1, Person2, N)
+    ).
 
+nthcousinkthremoved(Person1, Person2, N, K) :-
+    valid_n(N),
+    valid_k(K),
+    % Case 2: Person2’s Kth ancestor is an Nth cousin of Person1
+    (
+        ( K > 0 ->
+            nthparent(Person2, KthAncestor2, K, _)
+        ;   KthAncestor2 = Person2
+        ),
+        nthcousin(Person1, KthAncestor2, N)
+    ).
