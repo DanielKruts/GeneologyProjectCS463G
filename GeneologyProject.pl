@@ -94,83 +94,30 @@ age(nurgle, 52).
 age(chairon, 32).
 age(gadriel, 33).
 
-% %test stuff
-% fib(1,1).
-% fib(2,1).
-% fib(N,F) :-
-%     N > 2,
-%     N1 is N - 1,
-%     N2 is N - 2,
-%     fib(N1,F1),
-%     fib(N2,F2),
-%     F is F1 + F2.
+%Finds the grandparents of the grandchild or the opposite way around
+grandparent(Grandparent, Grandchild) :-
+     child(Parent, Grandparent),
+     child(Grandchild, Parent).
 
-% myfib(_,Y,1,Y).
-% myfib(X,Y,N,Z) :-
-%     N > 1,
-%     T is X + Y,
-%     N1 is N - 1,
-%     myfib(Y,T,N1,Z).
+%Finds all siblings of a single person
+sibling(Sibling1, Sibling2) :-
+    parent(Parent, Sibling1),
+    parent(Parent, Sibling2),
+    Sibling1 \= Sibling2.
 
-% %Finds the grandparents of the grandchild or the opposite way around
-% grandparent(Grandparent, Grandchild) :-
-%     child(Parent, Grandparent),
-%     child(Grandchild, Parent).
+%Parent predicate given child facts
+parent(Parent, Child) :-
+    child(Child, Parent).
 
-% %Parent predicate given child facts
+% This will calculate all kth children of a parent and what order they are
+kthchild(Child, Parent, K) :-
+    var(Child), !,
+    findall(K-TempChild-TempParent,
+            birth_order(TempChild, TempParent, K),
+            Children),
+    sort(Children, OrderedChildren),
+    member(K-Child-Parent, OrderedChildren).
 
-
-% % Will find if the two people are 1st cousins, but not nth cousins, and
-% % will find all 1st cousins of a singular person given
-% cousin_of(Cousin1,Cousin2) :-
-%     child(Cousin1, Parent1),
-%     child(Cousin2, Parent2),
-%     child(Parent1, Grandparent),
-%     child(Parent2, Grandparent),
-%     Parent1 \= Parent2,
-%     Cousin1 \= Cousin2.
-
-% cousins_list(Person, Unique) :-
-%     findall(Cousin, cousin_of(Person, Cousin), Cousins),
-%     sort(Cousins, Unique).
-
-% % base case
-% ancestor(Ancestor, Descendant, 1):-
-%     parent(Ancestor, Descendant).
-% % find the ancestor or descendant of any given person
-% ancestor(A, D, N):-
-%     parent(A, X),
-%     ancestor(X, D, M),
-%     N is M + 1.
-
-% %Finds all common ancestors given two people C1 and C2 and which generation for each
-% commonAncestor(A,C1,C2,G1,G2):-
-%     ancestor(A,C1,G1),
-%     ancestor(A,C2,G2),
-%     A \= C1,
-%     A \= C2.
-
-% %Returns whether two cousins are nth cousins or not
-% nthcousin(C1,C2,1):-
-%     cousin_of(C1,C2).
-% nthcousin(C1,C2,N):-
-%     child(C1,C2),
-%     N is N + 1.
-
-% nthcousinkremoved(N,K,X,Y):-
-%     N = K,
-%     cousin_of(X,Y).
-% % This will compute given two cousins, the label of which nth cousin
-% % they are however many removed
-% nthcousinkremoved(N,K,X,Y):-
-%     commonAncestor(A,X,Y,G1,G2),
-%     number(G1), number(G2),
-%     (   G1 >= G2
-%     ->  K is G1 - G2,
-%         N is G2
-%     ;   K is G2 - G1,
-%         N is G1
-%     ).
 % This takes a child and a parent, and finds the birth order of the child among all the parent's children
 % Ex: given gervin_the_reborn and gervin_the_inferno, it returns 2, since there is one child older than gervin_the_reborn
 birth_order(Child, Parent, Order) :-
@@ -183,25 +130,6 @@ birth_order(Child, Parent, Order) :-
         OlderSiblings),
     length(OlderSiblings, K),
     Order is K + 1.
-
-% This will calculate all kth children of a parent and what order they are
-kthchild(Parent, Child, K) :-
-    var(Child), !,
-    findall(K-TempChild,
-            birth_order(TempChild, Parent, K),
-            Children),
-    sort(Children, OrderedChildren),
-    member(K-Child, OrderedChildren).
-
-% -----------------------------------------------------------------------------
-% kthchild_list(Ancestor, K, ChildList)
-% Collects *all* Kth descendants of Ancestor into a list.
-
-kthchild_list(Ancestor, K, ChildList) :-
-    setof(Child, kthchild(Child, Ancestor, K), ChildList).
-
-
-
 
 valid_n(N) :- 
     between(0, 2, N).
