@@ -108,16 +108,23 @@ sibling(Sibling1, Sibling2) :-
 %Parent predicate given child facts
 parent(Parent, Child) :-
     child(Child, Parent).
-
-% This will calculate all kth children of a parent and what order they are
+% child is known, gives a parent and what order child they are
 kthchild(Child, Parent, K) :-
-    var(Child), !,
+    nonvar(Child),
+    birth_order(Child, Parent, K).
+% This will calculate all kth children of a parent or all parents if no parent given and what order children hey are
+kthchild(Child, Parent, K) :-
+    var(Child),
     findall(K-TempChild-TempParent,
             birth_order(TempChild, TempParent, K),
             Children),
     sort(Children, OrderedChildren),
     member(K-Child-Parent, OrderedChildren).
-
+% Given you know the child and K, finds the parent(s) if the K value is what kth order child they are
+kthchild(Child, Parent, K) :-
+    nonvar(Child),
+    nonvar(K),
+    birth_order(Child, Parent, K).
 % This takes a child and a parent, and finds the birth order of the child among all the parent's children
 % Ex: given gervin_the_reborn and gervin_the_inferno, it returns 2, since there is one child older than gervin_the_reborn
 birth_order(Child, Parent, Order) :-
