@@ -97,11 +97,13 @@ age(gadriel, 33).
 grandparent(Grandparent, Grandchild) :-
      child(Parent, Grandparent),
      child(Grandchild, Parent).
+
 %Finds all siblings of a single person
 sibling(Sibling1, Sibling2) :-
     parent(Parent, Sibling1),
     parent(Parent, Sibling2),
     Sibling1 \= Sibling2.
+
 %Parent predicate given child facts
 parent(Parent, Child) :-
     child(Child, Parent).
@@ -135,10 +137,16 @@ birth_order(Child, Parent, Order) :-
     length(OlderSiblings, K),
     Order is K + 1.
 
-valid_n(N) :- 
+valid_n(N) :- % Having a Valid N and K allows general inputs to be set and to be able to still increment
+% without going out of bounds
     between(0, 3, N).
 valid_k(K) :- 
     between(0, 3, K).
+
+% Inputs are the Child, the Ancestor, the number of generations N, and the Path taken as a list
+% Path is in order from Child to Ancestor, skips Child however
+% Base Case: 0 generations means Child = Ancestor, Path is empty
+% Another Base Case: 1 generation means Parent is Ancestor, Path is just the [Parent]
 nthparent(ChildParent, ChildParent, 0, []).
 nthparent(Child, Parent, 1, [Parent]) :-
     child(Child, Parent).
@@ -148,9 +156,19 @@ nthparent(Child, Ancestor, N, [Parent|RestPath]) :-
     child(Child, Parent),
     N1 is N - 1,
     nthparent(Parent, Ancestor, N1, RestPath).
+
+% Finds the second to last element in a list
+% Used to find the little common ancestor in the cousin function
 second_to_last(LilAncestor, [LilAncestor,_]).
 second_to_last(LilAncestor, [_|RestPath]) :-
     second_to_last(LilAncestor, RestPath).
+
+% Finds if two people are Nth cousins,
+% Current tree only goes up to 2rd cousins
+% Finds two people who share a common ancestor N+1 generations back,
+% but not N generations back, which is called LilAncestor (to avoid siblings, first cousins, etc)
+% Also ensures that the common ancestor is not married to the other's LilAncestor, to prevent 
+% possible duplicates via marriage
 nthcousin(Cousin1, Cousin2, N) :-
     valid_n(N),
     Generations is N + 1,
@@ -165,14 +183,13 @@ nthcousin(Cousin1, Cousin2, N) :-
     Cousin1 \= Cousin2,
     LilAncestor1 \= LilAncestor2,
     Ancestor1 = Ancestor2.
-    %write('Cousin1 path: '), write(Path1), nl,
-    %write('Cousin2 path: '), write(Path2), nl.
-% testfunction(CousinPairs, Cousin1, Cousin2, N, K) :-
-%     setof((Cousin1, Cousin2), nthcousin(Cousin1, Cousin2, N, K), CousinPairs).
+
+% Finds if two people are Nth cousins K times removed
+% Runs two cases, one where you go up K generations and find that Ancestor's Nth cousin,
+% and the other where you find your Nth cousin, and go down K generations to find their descendant
 nthcousinkthremoved(Person1, Person2, N, K) :-
     valid_n(N),
     valid_k(K),
-    % Case 1: Person1’s Kth ancestor is an Nth cousin of Person2
     (
         ( K > 0 ->
             nthparent(Person1, KthAncestor1, K, _)
@@ -184,7 +201,6 @@ nthcousinkthremoved(Person1, Person2, N, K) :-
 nthcousinkthremoved(Person1, Person2, N, K) :-
     valid_n(N),
     valid_k(K),
-    % Case 2: Person2’s Kth ancestor is an Nth cousin of Person1
     (
         ( K > 0 ->
             nthparent(Person2, KthAncestor2, K, _)
