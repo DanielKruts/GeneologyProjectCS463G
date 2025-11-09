@@ -138,13 +138,14 @@ birth_order(Child, Parent, Order) :-
     Order is K + 1.
 
 valid_n(N) :- 
-    between(0, 2, N).
+    between(0, 3, N).
 valid_k(K) :- 
-    between(0, 2, K).
+    between(0, 3, K).
 nthparent(ChildParent, ChildParent, 0, []).
 nthparent(Child, Parent, 1, [Parent]) :-
     child(Child, Parent).
 nthparent(Child, Ancestor, N, [Parent|RestPath]) :-
+    valid_n(N),
     N > 1,
     child(Child, Parent),
     N1 is N - 1,
