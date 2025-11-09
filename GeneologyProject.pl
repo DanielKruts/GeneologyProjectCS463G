@@ -47,25 +47,25 @@ child(gadriel, titus).
 child(chairon, nurgle).
 child(gadriel, nurgle).
 
-marrige(gervin_the_bold, nivreg).
-marrige(nivreg, gervin_the_bold).
+marriage(gervin_the_bold, nivreg).
+marriage(nivreg, gervin_the_bold).
 
-marrige(gervin_the_weird, rag).
-marrige(rag, gervin_the_weird).
+marriage(gervin_the_weird, rag).
+marriage(rag, gervin_the_weird).
 
-marrige(quasimoto, frog).
-marrige(frog, quasimoto).
+marriage(quasimoto, frog).
+marriage(frog, quasimoto).
 
-marrige(gervin_the_inferno, priscilla).
-marrige(priscilla, gervin_the_inferno).
+marriage(gervin_the_inferno, priscilla).
+marriage(priscilla, gervin_the_inferno).
 
-marrige(eden, adam).
-marrige(adam, eden).
-marrige(geoffry, turbine).
-marrige(turbine, geoffry).
+marriage(eden, adam).
+marriage(adam, eden).
+marriage(geoffry, turbine).
+marriage(turbine, geoffry).
 
-marrige(titus, nurgle).
-marrige(nurgle, titus).
+marriage(titus, nurgle).
+marriage(nurgle, titus).
 
 %Ages of the old farts
 age(gervin_the_bold, 90).
@@ -176,8 +176,8 @@ nthcousin(Cousin1, Cousin2, N) :-
     nthparent(Cousin2, Ancestor2, Generations, Path2),
     second_to_last(LilAncestor1, Path1),
     second_to_last(LilAncestor2, Path2),
-    marrige(Ancestor1, Partner1),
-    marrige(Ancestor2, Partner2),
+    marriage(Ancestor1, Partner1),
+    marriage(Ancestor2, Partner2),
     Ancestor1 \= Partner2,
     Ancestor2 \= Partner1,  
     Cousin1 \= Cousin2,
