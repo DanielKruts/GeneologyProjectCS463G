@@ -97,13 +97,11 @@ age(gadriel, 33).
 grandparent(Grandparent, Grandchild) :-
      child(Parent, Grandparent),
      child(Grandchild, Parent).
-
 %Finds all siblings of a single person
 sibling(Sibling1, Sibling2) :-
     parent(Parent, Sibling1),
     parent(Parent, Sibling2),
     Sibling1 \= Sibling2.
-
 %Parent predicate given child facts
 parent(Parent, Child) :-
     child(Child, Parent).
