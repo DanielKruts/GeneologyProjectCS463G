@@ -93,7 +93,6 @@ age(guy, 15).
 age(nurgle, 52).
 age(chairon, 32).
 age(gadriel, 33).
-
 %Finds the grandparents of the grandchild or the opposite way around
 grandparent(Grandparent, Grandchild) :-
      child(Parent, Grandparent),
@@ -120,7 +119,7 @@ kthchild(Child, Parent, K) :-
             Children),
     sort(Children, OrderedChildren),
     member(K-Child-Parent, OrderedChildren).
-% Given you know the child and K, finds the parent(s) if the K value is what kth order child they are
+% Given you know the child and K, finds the parent(s) if the K value is what kth order child they are to their parents
 kthchild(Child, Parent, K) :-
     nonvar(Child),
     nonvar(K),
